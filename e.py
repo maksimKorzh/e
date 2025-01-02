@@ -8,31 +8,31 @@ def main(stdscr):
   n = {
     ord('h'): 'if c>0:c-=1',
     ord('l'): 'if c<len(b[r]):c += 1',
-    ord('k'): 'if r!=0:r-=1;c=0',
-    ord('j'): 'if r<len(b)-1:r+=1;c=0',
-    ord('J'): 'l=b[r][c:];del b[r];r-=1;c=len(b[r]);b[r]+=l',
+    ord('k'): 'if r!=0:r-=1',
+    ord('j'): 'if r<len(b)-1:r+=1',
+    ord('d'): 'if len(b):del b[r];r=r if r<len(b) else r-1 if r-1 >= 0 else 0',
+    ord('$'): 'c = len(b[r])',
+    ord('0'): 'c = 0',
+    ord('u') & 0x1f: 'r = r-5 if r-5 > 0 else 0',
+    ord('d') & 0x1f: 'r = r+5 if r+5 < len(b)-1 else len(b)-1',
     ord('i'): 'm=1',
     't': [
       'if i!=((i)&0x1f) and i<128:b[r].insert(c,i);c+=1',
       'if i==263 and c:c-=1;del b[r][c]',
+      'if i ==263 and c==0: l=b[r][c:];del b[r];r-=1;c=len(b[r]);b[r]+=l',
       'if i==10:l=b[r][c:];b[r]=b[r][:c];r+=1;c=0;b.insert(r,[]+l)'
     ],
     'v': [
-      'R,C = s.getmaxyx()',
-      'if r < y: y = r',
-      'if r >= y + R: y = r - R+1',
-      'if c < x: x = c',
-      'if c >= x + C: x = c - C+1',
-      'for rw in range(R):',
-      '  brw = rw + y',
-      '  for cl in range(C):',
-      '    bcl = cl + x',
-      '    try: s.addch(rw, cl, b[brw][bcl])',
-      '    except: pass',
-      '  s.clrtoeol()',
-      '  try: s.addch(10)',
-      '  except: pass',
+      'R,C = s.getmaxyx()\nif r<y:y=r\nif r>=y+R:y=r-R+1\nif c<x:x=c\nif c>=x+C:x=c-C+1',
+      'for rw in range(R):\n  brw=rw+y\n  for cl in range(C):\n    bcl=cl+x',
+      '    try: s.addch(rw, cl, b[brw][bcl])\n    except: pass\n  s.clrtoeol()',
+      '  try: s.addch(10)\n  except: pass',
       'curses.curs_set(0); s.move(r-y, c-x); curses.curs_set(1); s.refresh();i=-1'
+    ],
+    'c': [
+      'if not len(b): b = [[]]',
+      'rw = b[r] if r < len(b) else None; rwlen = len(rw) if rw is not None else 0',
+      'if c > rwlen: c = rwlen'
     ]
   }
   if len(sys.argv) == 2: src = sys.argv[1]
@@ -50,15 +50,7 @@ def main(stdscr):
       if not v['m']: exec(n[v['i']], v)
       elif v['m'] == 1: exec('\n'.join(n['t']), v)
     except: pass
-
-  #  elif ch == curses.KEY_END: c = len(b[r])
-  #  elif ch == curses.KEY_HOME: c = 0
-  #  elif ch == curses.KEY_PPAGE: r = r-5 if r-5 > 0 else 0
-  #  elif ch == curses.KEY_NPAGE: r = r+5 if r+5 < len(b)-1 else len(b)-1
-  #  elif ch == curses.KEY_DC and len(b): del b[r]; r = r if r < len(b) else r-1 if r-1 >= 0 else 0
-  #  if not len(b): b = [[]]
-  #  rw = b[r] if r < len(b) else None; rwlen = len(rw) if rw is not None else 0
-  #  if c > rwlen: c = rwlen 
+    exec('\n'.join(n['c']), v)
     if v['i'] == (ord('q') & 0x1f): sys.exit()
     if v['i'] == 27: v['m'] = 0
   #  elif ch == (ord('s') & 0x1f):
