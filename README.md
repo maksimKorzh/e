@@ -20,6 +20,14 @@
     Ctrl-w write changes to current file
     Ctrl-q quit editor without saving changes
 
+# Limitations
+    Copy/Paste and Find are not implemented but assuming, say,
+    gnome terminal you can select text with mouse, copy via
+    Ctrl-Shift-C and paste with Ctrl-Shift-V, searching via
+    Ctrl-Shift-F is limited to the scope of current page because
+    ncurses have its own buffer and only visible part of it is
+    accessible by the terminal emulator.
+
 # Installation
     git clone https://github.com/maksimKorzh/e
     cd e
