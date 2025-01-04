@@ -17,8 +17,8 @@
 
     I/O:
 
-    Ctrl-w write changes to current file
-    Ctrl-q quit editor without saving changes
+    Ctrl-w - write changes to current file
+    Ctrl-q - quit editor without saving changes
 
 # Limitations
     Copy/Paste and Find are not implemented but assuming, say,
