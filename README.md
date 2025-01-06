@@ -5,6 +5,8 @@
     j - move cursor down, Ctrl-d moves cursor 5 lines down
     k - move cursor up, Ctrl-u moves cursor 5 lines up
     l - move cursor right
+    g - move cursor to first line
+    G - move cursor to last line
     d - delete current line
     x - delete current char
     i - go to insert mode
